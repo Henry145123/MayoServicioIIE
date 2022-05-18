@@ -40,7 +40,7 @@ public class ProductoRepositoryImpl implements ProductoRepository {
 	@Override
 	public Producto obtenerProductoId(Integer id) {
 		// TODO Auto-generated method stub
-		/*
+		
 		Producto p = new Producto();
 		for(Producto item:listaProducto) {
 			if(item.getIdProducto() == id) {
@@ -49,8 +49,8 @@ public class ProductoRepositoryImpl implements ProductoRepository {
 		}
 		
 		return p;
-		*/
-		return listaProducto.stream().filter(p->p.getIdProducto()==id).findFirst().orElse(null);
+		
+		//return listaProducto.stream().filter(p->p.getIdProducto()==id).findFirst().orElse(null);
 	}
 
 	@Override

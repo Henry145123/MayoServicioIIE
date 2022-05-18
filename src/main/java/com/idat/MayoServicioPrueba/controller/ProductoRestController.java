@@ -65,8 +65,10 @@ public class ProductoRestController {
 		
 		Producto pro=proServ.obtenerProductoId(id);		
 		if(pro!=null) {
-				pro.setIdProducto(id);
-				proServ.actualizarProducto(pro);
+	
+				p.setIdProducto(id);
+			
+				proServ.actualizarProducto(p);
 			return new ResponseEntity<Void>(HttpStatus.OK); 
 		}		
 		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
