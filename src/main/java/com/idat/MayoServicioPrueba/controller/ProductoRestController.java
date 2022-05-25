@@ -12,19 +12,73 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.idat.MayoServicioPrueba.model.Producto;
 import com.idat.MayoServicioPrueba.service.ProductoService;
 
+import antlr.collections.List;
+
 
 
 @RestController
-@RequestMapping("/producto")
+@RequestMapping("/producto/v1")
 public class ProductoRestController {
 	@Autowired
 	private ProductoService proServ;
 	
+	
+	@RequestMapping("/listar")
+	public @ResponseBody ResponseEntity<Collection<Producto>>  listar(){
+		
+		 return new ResponseEntity<Collection<Producto>>( proServ.listaProductos(),HttpStatus.OK);
+	}
+	
+	@RequestMapping(path="/guardar",method=RequestMethod.POST)
+	//@PostMapping("/guardar")
+	public ResponseEntity<Void> guardar(@RequestBody Producto producto) {
+		proServ.guardarProducto(producto);
+		return new ResponseEntity<Void>(HttpStatus.CREATED);
+	}
+	
+	
+	
+	@RequestMapping(path="/borrar/{id}",method=RequestMethod.DELETE)
+	public ResponseEntity<Void> eliminar(@PathVariable Integer id){
+		Producto p = proServ.obtenerProductoId(id);
+		if(p!=null) {
+			proServ.eliminarProducto(id);
+			return new ResponseEntity<Void>(HttpStatus.OK); 
+		}
+		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+	}
+	
+	@RequestMapping(path="/buscar/{id}",method=RequestMethod.GET)
+	public ResponseEntity<Producto> buscarPorId(@PathVariable Integer id){
+		Producto p =proServ.obtenerProductoId(id);
+		if(p!=null) {
+			return new ResponseEntity<Producto>(p,HttpStatus.OK);
+		}
+		return new ResponseEntity<Producto>(HttpStatus.NOT_FOUND);
+	}
+	
+	@RequestMapping(path="/editar",method=RequestMethod.PUT)
+	public ResponseEntity<Void> actualizar(@RequestBody Producto p){
+		
+		Producto pro=proServ.obtenerProductoId(p.getIdProducto());		
+		if(pro!=null) {
+				proServ.actualizarProducto(p);
+			return new ResponseEntity<Void>(HttpStatus.OK); 
+		}		
+		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+	}
+	
+	
+	
+	
+	/*
 	@GetMapping("/listar")
 	public ResponseEntity<?> listar(){
 		Collection<Producto> listaProductos = proServ.listaProductos();
@@ -73,5 +127,5 @@ public class ProductoRestController {
 		return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 
 	}
-	
+	*/
 }
