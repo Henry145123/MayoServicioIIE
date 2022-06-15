@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.idat.MayoServicioPrueba.dto.ProductoDTORequest;
+import com.idat.MayoServicioPrueba.dto.ProductoDTOResponse;
 import com.idat.MayoServicioPrueba.model.Producto;
 import com.idat.MayoServicioPrueba.service.ProductoService;
 
@@ -31,14 +33,14 @@ public class ProductoRestController {
 	
 	
 	@RequestMapping("/listar")
-	public @ResponseBody ResponseEntity<Collection<Producto>>  listar(){
+	public @ResponseBody ResponseEntity<Collection<ProductoDTOResponse>>  listar(){
 		
-		 return new ResponseEntity<Collection<Producto>>( proServ.listaProductos(),HttpStatus.OK);
+		 return new ResponseEntity<Collection<ProductoDTOResponse>>( proServ.listaProductos(),HttpStatus.OK);
 	}
 	
 	@RequestMapping(path="/guardar",method=RequestMethod.POST)
 	//@PostMapping("/guardar")
-	public ResponseEntity<Void> guardar(@RequestBody Producto producto) {
+	public ResponseEntity<Void> guardar(@RequestBody ProductoDTORequest producto) {
 		proServ.guardarProducto(producto);
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
@@ -47,7 +49,7 @@ public class ProductoRestController {
 	
 	@RequestMapping(path="/borrar/{id}",method=RequestMethod.DELETE)
 	public ResponseEntity<Void> eliminar(@PathVariable Integer id){
-		Producto p = proServ.obtenerProductoId(id);
+		ProductoDTOResponse p = proServ.obtenerProductoId(id);
 		if(p!=null) {
 			proServ.eliminarProducto(id);
 			return new ResponseEntity<Void>(HttpStatus.OK); 
@@ -56,18 +58,18 @@ public class ProductoRestController {
 	}
 	
 	@RequestMapping(path="/buscar/{id}",method=RequestMethod.GET)
-	public ResponseEntity<Producto> buscarPorId(@PathVariable Integer id){
-		Producto p =proServ.obtenerProductoId(id);
+	public ResponseEntity<ProductoDTOResponse> buscarPorId(@PathVariable Integer id){
+		ProductoDTOResponse p =proServ.obtenerProductoId(id);
 		if(p!=null) {
-			return new ResponseEntity<Producto>(p,HttpStatus.OK);
+			return new ResponseEntity<ProductoDTOResponse>(p,HttpStatus.OK);
 		}
-		return new ResponseEntity<Producto>(HttpStatus.NOT_FOUND);
+		return new ResponseEntity<ProductoDTOResponse>(HttpStatus.NOT_FOUND);
 	}
 	
 	@RequestMapping(path="/editar",method=RequestMethod.PUT)
-	public ResponseEntity<Void> actualizar(@RequestBody Producto p){
+	public ResponseEntity<Void> actualizar(@RequestBody ProductoDTORequest p){
 		
-		Producto pro=proServ.obtenerProductoId(p.getIdProducto());		
+		ProductoDTOResponse pro=proServ.obtenerProductoId(p.getId());		
 		if(pro!=null) {
 				proServ.actualizarProducto(p);
 			return new ResponseEntity<Void>(HttpStatus.OK); 
